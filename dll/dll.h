@@ -2,7 +2,7 @@
 
 typedef struct Node
 {
-	int element;
+	void* element;
 	struct Node* prev;
 	struct Node* next;
 }Node;
@@ -18,21 +18,19 @@ DoublyLinkedList* createList();
 
 _Bool IsEmpty(const DoublyLinkedList* list);
 
-Node* createNode(const int* value);
+Node* createNode();
 
-void addFront(DoublyLinkedList* list, const int* value);
+void addFront(DoublyLinkedList* list, void* value);
 
-void addBack(DoublyLinkedList* list, const int* value);
-
-void printList(const DoublyLinkedList* list);
+void addBack(DoublyLinkedList* list, void* value);
 
 void removeFront(DoublyLinkedList* list);
 
 void removeBack(DoublyLinkedList* list);
 
-const int* getFirstItem(DoublyLinkedList* list);
+void* getFirstItem(DoublyLinkedList* list);
 
-const int* getLastItem(DoublyLinkedList* list);
+void* getLastItem(DoublyLinkedList* list);
 
 DoublyLinkedList* reverse(DoublyLinkedList* list);
 

@@ -8,6 +8,8 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option);
 void printOptions();
 int get_int(unsigned int *px);
 
+void printListLocal(const DoublyLinkedList* list);
+
 int main(int argc, char** argv)
 {
 	printf("\n\n*****************************************************\n\n");
@@ -18,9 +20,10 @@ int main(int argc, char** argv)
 	
 	unsigned int option = 0;
 	
+	printOptions();
+	
 	while(option != 10)
 	{
-		printOptions();
 		get_int(&option);
 		if(option != 10)
 			performUserSelection(list, option);
@@ -62,23 +65,25 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 	{
 		case 1:
 		{
-			printList(list);
+			printListLocal(list);
 			break;
 		}
 		case 2:
 		{
-			int userInput = 0;
+			int* userInput = (int*)malloc(sizeof(int));
 			printf("\nEnter the element to add.\n");
-			scanf("%d", &userInput);
-			addFront(list, &userInput);
+			scanf("%d", userInput);
+			void* pass = (void*)(userInput);			
+			addFront(list, pass);
 			break;
 		}
 		case 3:
 		{
-			int userInput = 0;
+			int* userInput = (int*)malloc(sizeof(int));
 			printf("\nEnter the element to add.\n");
-			scanf("%d", &userInput);
-			addBack(list, &userInput);
+			scanf("%d", userInput);
+			void* pass = (void*)(userInput);
+			addBack(list, pass);
 			break;
 		}		
 		case 4:
@@ -93,7 +98,7 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 		}		
 		case 6:
 		{
-			const int* firstelement = getFirstItem(list);
+			int* firstelement = (int*)getFirstItem(list);
 			if(firstelement != NULL)
 				printf("\nFirst element %d\n", *(firstelement));
 			else
@@ -102,7 +107,7 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 		}
 		case 7:
 		{
-			const int* lastelement = getLastItem(list);
+			int* lastelement = (int*)getLastItem(list);
 			if(lastelement != NULL)
 				printf("\nFirst element %d\n", *(lastelement));
 			else
@@ -111,7 +116,7 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 		}
 		case 8:
 		{
-			printList(reverse(list));
+			printListLocal(reverse(list));
 			break;
 		}				
 		case 9:
@@ -129,6 +134,34 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 		}
 		default:
 			printf("\nPlease select apprapriate option...\n");
+	}
+}
+
+void printListLocal(const DoublyLinkedList* list)
+{
+	if(IsEmpty(list))
+	{
+		printf("\nList is empty.\n");
+	}
+	else
+	{
+		Node* cursor = list->header;	
+		while(cursor->next != list->trailer)
+		{
+			printf("******************************************\n");
+			printf("*\t print node : --->   %p \t *\n", cursor->next);			
+			printf("*\t print item : --->   %p \t *\n", cursor->next->element);
+			printf("*\t print item : --->   %d \t *\n", *(int*)cursor->next->element);			
+			printf("******************************************\n");	
+			
+			cursor = cursor->next;
+			
+			if(cursor->next != list->trailer)
+			{
+				printf("\t\t ^ \t  | \t\t\n");
+				printf("\t\t | \t  v \t\t\n");
+			}
+		}
 	}
 }
 

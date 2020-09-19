@@ -4,7 +4,8 @@
 #include "dll.h"
 
 void removeItem(DoublyLinkedList* list, _Bool isFrontRemoval);
-void addItem(DoublyLinkedList* list, const int* value, _Bool isFrontAdd);
+void addItem(DoublyLinkedList* list, void* value, _Bool isFrontAdd);
+void destroyNode(Node* node);
 
 
 DoublyLinkedList* createList()
@@ -16,9 +17,8 @@ DoublyLinkedList* createList()
 		return NULL;
 	}
 	
-	int value = 0;
-	list->header = createNode(&value);
-	list->trailer = createNode(&value);
+	list->header = createNode();
+	list->trailer = createNode();
 	
 	list->header->next = list->trailer;
 	list->trailer->prev = list->header;
@@ -27,11 +27,11 @@ DoublyLinkedList* createList()
 }
 
 _Bool IsEmpty(const DoublyLinkedList* list)
-{
+{		
 	return list->header->next == list->trailer;
 }
 
-Node* createNode(const int* value)
+Node* createNode()
 {
 	Node* node = (Node*)malloc(sizeof(Node));
 	if(node == NULL)
@@ -39,26 +39,28 @@ Node* createNode(const int* value)
 		printf("Memory allocation failed...try again later\n");
 		return NULL;
 	}
-	node->element = *value;
+	node->element = NULL;
 	node->prev = NULL;
 	node->next = NULL;
 	
 	return node;
 }
 
-void addFront(DoublyLinkedList* list, const int* value)
+void addFront(DoublyLinkedList* list, void* value)
 {
 	addItem(list, value, 1);
 }
 
-void addBack(DoublyLinkedList* list, const int* value)
+void addBack(DoublyLinkedList* list, void* value)
 {
 	addItem(list, value, 0);
 }
 
-void addItem(DoublyLinkedList* list, const int* value, _Bool isFrontAdd)
+void addItem(DoublyLinkedList* list, void* value, _Bool isFrontAdd)
 {
-	Node* node = createNode(value);
+	Node* node = createNode();
+	node->element = value;
+	
 	if(IsEmpty(list))
 	{
 		list->header->next = node;
@@ -109,7 +111,7 @@ void removeItem(DoublyLinkedList* list, _Bool isFrontRemoval)
 		list->header->next = firstItem->next;
 		firstItem->next->prev = list->header;
 		
-		free(firstItem);
+		destroyNode(firstItem);
 	}
 	else
 	{
@@ -118,11 +120,11 @@ void removeItem(DoublyLinkedList* list, _Bool isFrontRemoval)
 		list->trailer->prev = lastItem->prev;
 		lastItem->prev->next = list->trailer;
 		
-		free(lastItem);		
+		destroyNode(lastItem);		
 	}	
 }
 
-const int* getFirstItem(DoublyLinkedList* list)
+void* getFirstItem(DoublyLinkedList* list)
 {
 	if(IsEmpty(list))
 	{
@@ -130,11 +132,11 @@ const int* getFirstItem(DoublyLinkedList* list)
 	}
 	else
 	{
-		return &(list->header->next->element);
+		return list->header->next->element;
 	}
 }
 
-const int* getLastItem(DoublyLinkedList* list)
+void* getLastItem(DoublyLinkedList* list)
 {
 	if(IsEmpty(list))
 	{
@@ -142,25 +144,7 @@ const int* getLastItem(DoublyLinkedList* list)
 	}
 	else
 	{
-		return &(list->trailer->prev->element);
-	}
-}
-
-void printList(const DoublyLinkedList* list)
-{
-	if(IsEmpty(list))
-	{
-		printf("\nList is empty.\n");
-	}
-	else
-	{
-		Node* tempCursor = list->header;
-		while(tempCursor->next != list->trailer)
-		{
-			printf("%d ", tempCursor->next->element);
-			tempCursor = tempCursor->next;
-		}
-		printf("\n");
+		return list->trailer->prev->element;
 	}
 }
 
@@ -172,21 +156,27 @@ DoublyLinkedList* reverse(DoublyLinkedList* list)
 	}
 	else
 	{
-		DoublyLinkedList* tempList = createList();
-		while(!IsEmpty(list))
+		Node* frontCursor = list->header->next;
+		Node* backCursor = list->trailer->prev;	
+		
+		while(frontCursor != backCursor)
 		{
-			addFront(tempList, getFirstItem(list));
-			removeFront(list);
+			void* temp = backCursor->element;
+			
+			backCursor->element = frontCursor->element;
+			frontCursor->element = temp;
+			
+			if(frontCursor != backCursor)
+			{
+				frontCursor = frontCursor->next;
+				backCursor = backCursor->prev;		
+			}
 		}
-		while(!IsEmpty(tempList))
-		{
-			addBack(list, getFirstItem(tempList));
-			removeFront(tempList);
-		}
-		destroyList(tempList);
+		
 	}
 	return list;
 }
+
 
 void destroyList(DoublyLinkedList* list)
 {
@@ -197,6 +187,15 @@ void destroyList(DoublyLinkedList* list)
 	free(list->header);
 	free(list->trailer);	
 	free(list);
+}
+
+void destroyNode(Node* node)
+{
+	if(node != NULL)
+	{
+		free(node->element);
+		free(node);
+	}
 }
 
 
