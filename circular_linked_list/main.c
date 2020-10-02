@@ -18,9 +18,11 @@ int main(int argc, char** argv)
 	
 	unsigned int option = 0;
 	
+	printOptions();
+	
 	while(option != 8)
 	{
-		printOptions();
+		//printOptions();
 		get_int(&option);
 		if(option != 8)
 			performUserSelection(list, option);
@@ -64,10 +66,10 @@ void performUserSelection(CircularlyLinkedList* list, unsigned int option)
 		}
 		case 2:
 		{
-			int userInput = 0;
+			int* userInput = (int*)malloc(sizeof(int));
 			printf("\nEnter the element to add.\n");
-			scanf("%d", &userInput);
-			addItem(list, &userInput);
+			scanf("%d", userInput);
+			addItem(list, userInput);
 			break;
 		}
 		case 3:
@@ -79,7 +81,7 @@ void performUserSelection(CircularlyLinkedList* list, unsigned int option)
 		{
 			Node* firselement = front(list);
 			if(firselement != NULL)
-				printf("\nFirst element %d\n", *(firselement->element));
+				printf("\nFirst element %d\n", *(int*)(firselement->element));
 			else
 				printf("\nList is Empty\n");
 			break;
@@ -88,7 +90,7 @@ void performUserSelection(CircularlyLinkedList* list, unsigned int option)
 		{
 			Node* lastelement = back(list);
 			if(lastelement != NULL)
-				printf("\nFirst element %d\n", *(lastelement->element));
+				printf("\nLast element %d\n", *(int*)(lastelement->element));
 			else
 				printf("\nList is Empty\n");
 			break;

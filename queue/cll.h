@@ -1,3 +1,6 @@
+#ifndef _CLL_H
+#define _CLL_H
+
 typedef struct Node
 {
 	void* element;
@@ -29,3 +32,5 @@ Node* back(CircularlyLinkedList* list);
 void printList(CircularlyLinkedList* list);
 
 void destroyList(CircularlyLinkedList* list);
+
+#endif
