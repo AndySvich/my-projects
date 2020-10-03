@@ -8,7 +8,18 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option);
 void printOptions();
 int get_int(unsigned int *px);
 
-void printListLocal(const DoublyLinkedList* list);
+int key_match_proton(void* element, void* key);
+
+void print_proton(void* protonItem);
+
+void print_integer(void* intItem);
+
+typedef struct proton
+{
+	unsigned int id;
+	char symbol;
+}proton;
+
 
 int main(int argc, char** argv)
 {
@@ -17,6 +28,10 @@ int main(int argc, char** argv)
 	printf("*****************************************************\n\n");	
 	
 	DoublyLinkedList * list = createList();
+	
+	register_print_function(list, print_integer);
+	//register_print_function(list, print_proton);	
+	register_KeyMatch_Function(list, key_match_proton);
 	
 	unsigned int option = 0;
 	
@@ -55,7 +70,8 @@ void printOptions()
 	printf("\t6. Display the first element of the list\n");
 	printf("\t7. Display the last element of the list\n");
 	printf("\t8. Reverse and print the list\n");	
-	printf("\t9. Check if list is empty\n");		
+	printf("\t9. Check if list is empty\n");	
+	//printf("\t11. Find element by key :\n");
 	printf("\t10. Exit\n");	
 }
 
@@ -65,7 +81,7 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 	{
 		case 1:
 		{
-			printListLocal(list);
+			print_dll(list);
 			break;
 		}
 		case 2:
@@ -73,7 +89,28 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 			int* userInput = (int*)malloc(sizeof(int));
 			printf("\nEnter the element to add.\n");
 			scanf("%d", userInput);
-			void* pass = (void*)(userInput);			
+			void* pass = (void*)(userInput);
+			
+			//********
+			
+			//proton* proton_one = (proton*)malloc(sizeof(proton));
+			//proton_one->id = 454;
+			//proton_one->symbol = 'T';
+			
+			//proton* proton_two = (proton*)malloc(sizeof(proton));
+			//proton_two->id = 600;
+			//proton_two->symbol = 'X';
+			
+			//proton* proton_three = (proton*)malloc(sizeof(proton));
+			//proton_three->id = 999;
+			//proton_three->symbol = 'S';	
+					
+			//addFront(list, proton_one);
+			//addFront(list, proton_two);
+			//addFront(list, proton_three);
+			
+			//********
+						
 			addFront(list, pass);
 			break;
 		}
@@ -116,7 +153,7 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 		}
 		case 8:
 		{
-			printListLocal(reverse(list));
+			print_dll(reverse(list));
 			break;
 		}				
 		case 9:
@@ -132,38 +169,52 @@ void performUserSelection(DoublyLinkedList* list, unsigned int option)
 			}
 			break;
 		}
+		case 11:
+		{
+			unsigned int* searchKey = (unsigned int*)malloc(sizeof(unsigned int));
+			*searchKey = 999;
+			
+			proton* resultItem = (proton*)searchElementByKey(list, (void*)searchKey);
+			if(resultItem)
+				print_proton(resultItem);
+			else
+				printf("\nList is empty\n");				
+			break;
+		}
 		default:
 			printf("\nPlease select apprapriate option...\n");
 	}
 }
 
-void printListLocal(const DoublyLinkedList* list)
+void print_integer(void* intItem)
 {
-	if(IsEmpty(list))
-	{
-		printf("\nList is empty.\n");
-	}
-	else
-	{
-		Node* cursor = list->header;	
-		while(cursor->next != list->trailer)
-		{
-			printf("******************************************\n");
-			printf("*\t print node : --->   %p \t *\n", cursor->next);			
-			printf("*\t print item : --->   %p \t *\n", cursor->next->element);
-			printf("*\t print item : --->   %d \t *\n", *(int*)cursor->next->element);			
-			printf("******************************************\n");	
-			
-			cursor = cursor->next;
-			
-			if(cursor->next != list->trailer)
-			{
-				printf("\t\t ^ \t  | \t\t\n");
-				printf("\t\t | \t  v \t\t\n");
-			}
-		}
-	}
+	int* intItem_local = (int*)intItem;
+	printf("\nproton Id : %u \n", *intItem_local);	
 }
+
+
+void print_proton(void* protonItem)
+{
+	proton* proton_local = (proton*)protonItem;
+	printf("\nproton Id : %u \n", proton_local->id);
+	printf("proton Symbol : %c \n\n", proton_local->symbol);	
+}
+
+
+int key_match_proton(void* element, void* key)
+{
+	proton* proton_local = (proton*)element;
+	unsigned int* key_local = (unsigned int*)key;
+	
+	if(proton_local->id == *key_local)
+		return 1;
+	else 
+		return 0;
+}
+
+
+
+
 
 
 

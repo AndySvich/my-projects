@@ -6,6 +6,7 @@
 void removeItem(DoublyLinkedList* list, _Bool isFrontRemoval);
 void addItem(DoublyLinkedList* list, void* value, _Bool isFrontAdd);
 void destroyNode(Node* node);
+Node* createNode();
 
 
 DoublyLinkedList* createList()
@@ -198,6 +199,54 @@ void destroyNode(Node* node)
 	}
 }
 
+void register_KeyMatch_Function(DoublyLinkedList* list, int (*key_match)(void*, void*))
+{
+	list->key_match = key_match;
+}
 
 
+void* searchElementByKey(DoublyLinkedList* list, void* key)
+{
+	if(IsEmpty(list))
+	{
+		return NULL;
+	}
+	else
+	{
+		Node* cursor = list->header->next;
+		while(cursor != list->trailer)
+		{
+			if(list->key_match(cursor->element, key) == 1)
+			{
+				return cursor->element;
+			}
+			cursor = cursor->next;
+		}
+		return NULL;
+	}
+}
+
+
+void register_print_function(DoublyLinkedList* list, void (*print_item)(void*))
+{
+	list->print_item = print_item;
+}
+
+
+void print_dll(DoublyLinkedList* list)
+{
+	if(IsEmpty(list))
+	{
+		printf("\nList is empty.\n");
+	}
+	else
+	{
+		Node* cursor = list->header->next;
+		while(cursor != list->trailer)
+		{
+			list->print_item(cursor->element);
+			cursor = cursor->next;
+		}
+	}
+}
 
