@@ -2,6 +2,6 @@
 1. Singly Linked List (one-sll)
 2. Doubly Linked List (dll)
 3. Circularly Linked List
-4.stack
-5.queue
-6.deque
+4. Stack
+5. Queue
+6. Deque
