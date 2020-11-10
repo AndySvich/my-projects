@@ -14,6 +14,7 @@ SinglyLinkedList* createList()
 	}
 	else
 	{
+		list->currentItem = NULL;
 		return list;
 	}
 }
