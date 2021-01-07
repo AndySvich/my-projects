@@ -1,20 +1,34 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-void bubbleSort(int A[], int n)
+void bubbleSort(int A[], int n, int isAscending)
 {
 	for(int i = 0 ; i < n - 1 ; i++)
 	{
 		_Bool noSwaps = 1;
 		for(int j = 0 ; j < n - 1 - i ; j++)
 		{
-			if(A[j] < A[j + 1])
+			if(isAscending)
 			{
-				int temp = A[j];
-				A[j] = A[j + 1];
-				A[j + 1] = temp;
+				if(A[j] > A[j + 1])
+				{
+					int temp = A[j];
+					A[j] = A[j + 1];
+					A[j + 1] = temp;
 
-				noSwaps = 0;
+					noSwaps = 0;
+				}
+			}
+			else
+			{
+				if(A[j] < A[j + 1])
+				{
+					int temp = A[j];
+					A[j] = A[j + 1];
+					A[j + 1] = temp;
+
+					noSwaps = 0;
+				}
 			}
 		}
 		if(noSwaps)
@@ -44,12 +58,22 @@ int main(int argc, char** argv)
 
 	printf("\n\n ****** Sorted Array (Descending) ****** \n");
 
-	bubbleSort(array, size);
+	bubbleSort(array, size, 0);
 
 	for(int i = 0 ; i < size ; i++)
 	{
 		printf("%d ", array[i]);
 	}
+
+
+	printf("\n\n ****** Sorted Array (Ascending) ****** \n");
+
+	bubbleSort(array, size, 1);
+
+	for(int i = 0 ; i < size ; i++)
+	{
+		printf("%d ", array[i]);
+	}	
 
 	return 0;
 }
