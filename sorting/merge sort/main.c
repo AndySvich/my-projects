@@ -54,6 +54,17 @@ void mergeSort(int A[], int size)
     }
 }
 
+void recursiveMergeSort(int A[], int low, int high)
+{
+	if(low < high)
+	{
+		int mid = (low + high) / 2;
+		recursiveMergeSort(A, low, mid);
+		recursiveMergeSort(A, mid + 1, high);
+		merge(A, low, mid, high);
+	}
+}
+
 int main(int argc, char** argv)
 {
 	int size = 9;
@@ -64,12 +75,12 @@ int main(int argc, char** argv)
 	int k = 0;
 	while(k < size)
 	{
-		printf("Enter an element for Array 1 : \n");
+		printf("Enter an element for Array : \n");
 		scanf("%d", &array[k]);
 		k++;
 	}
 
-	printf("****** Input Array - 1 ****** \n");
+	printf("****** Input Array ****** \n");
 	for(int i = 0 ; i < size ; i++)
 	{
 		printf("%d ", array[i]);
@@ -77,7 +88,15 @@ int main(int argc, char** argv)
 
 	mergeSort(array, size);
 
-	printf("\n ****** Merged Array ****** \n");
+	printf("\n ****** Iterative Merge Sort Output ****** \n");
+	for(int i = 0 ; i < size ; i++)
+	{
+		printf("%d ", array[i]);
+	}
+
+	recursiveMergeSort(array, 0, size - 1);
+
+	printf("\n ****** Recursive Merge Sort Output ****** \n");
 	for(int i = 0 ; i < size ; i++)
 	{
 		printf("%d ", array[i]);
