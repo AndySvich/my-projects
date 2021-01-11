@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
 	countSort(array, size);
 
-	printf("\n ****** Iterative Merge Sort Output ****** \n");
+	printf("\n ****** Count Sort Output ****** \n");
 	for(int i = 0 ; i < size ; i++)
 	{
 		printf("%d ", array[i]);
